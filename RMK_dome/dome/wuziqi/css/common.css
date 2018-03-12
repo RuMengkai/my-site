@@ -1,0 +1,13 @@
+﻿/* CSS Document */
+body,html{height:100%}
+body{font-family:"Microsoft YaHei",Tahoma, Verdana;font-size:12px;margin:0;padding:0;border:none;}
+html,div,p,span,form,legend,fieldset,h1,h2,h3,h4,h5,h6,hr,ul,li,ol,dl,dd,dt,nr{margin:0;padding:0;border:none;}
+button,img,a,input,textarea,th,td,table,lable{margin:0;padding:0;}
+a{text-decoration:none;color:#000}
+ul,li,ol{list-style:none}
+img{border:none}
+.clear{height:0;overflow:hidden;font-size:0;clear:both}
+.red{color: red;}
+.blue{color: blue;}
+.green{color: green;}
+.border-r{border: 1px solid #666; border-radius: 5px;}

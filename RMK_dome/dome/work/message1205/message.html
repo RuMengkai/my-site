@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>留言板</title>
+		<link rel="stylesheet" type="text/css" href="css/common.css"/>
+		<script src="js/message.js" type="text/javascript" charset="utf-8"></script>
+	</head>
+	<style type="text/css">
+		h4{width: 300px;margin: 20px auto;}
+		h4>span{color: #f00;}
+		.box{border: 1px solid #ccc;text-align: center; width: 400px;overflow: hidden; margin: 0 auto;}
+		textarea{margin: 10px auto;display: block;}
+		#from{margin: 10px;}
+		#content>dl{padding: 10px; text-align: left; overflow: hidden; background: #ccc;border-radius: 5px;margin-top: 10px;}
+		#content>dl>dt{}
+		#content>dl>dd{text-indent: 2em;left: 10px;}
+		#content>dl>.time{float:right;font-size: 10px;}
+	</style>
+	<body>
+		<h4><span>使用说明：</span>可以多人输入多个留言，同时，输入对应的姓名，点击搜索按钮，进行根据留言者的姓名筛选留言。</h4>
+		<div class="box">
+			<h2>简易留言板</h2>
+			<textarea name="text" id="message" rows="5" cols="50"></textarea>
+			from:<input type="text" name="from" id="from" value="茹孟凯" />
+			<input type="button" name="search" id="search" value="搜索" />
+			<br />
+			<input type="button" name="btn" id="btn" value="留言" />
+			<div id="content">
+				<div id="">
+					
+				</div>
+			</div>
+		</div>
+		<script src="js/jquery.min.js"></script>
+	</body>
+</html>

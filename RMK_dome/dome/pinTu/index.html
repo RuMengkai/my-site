@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title>拼图</title>
+	</head>
+	<link rel="stylesheet" type="text/css" href="css/index.css"/>
+	<body>
+		<div class="top">
+			<p class="p1">拼图游戏</p>
+			<p class="p2"><span class="red">游戏玩法</span>：首先点击选中其中一张图片，然后点击需要交换位置的另外一张图片。</p>
+		</div>
+		<div class="pic">
+			<div class="pi"id="pic_1">
+				
+			</div>
+			<div class="pi"id="pic_2">
+				
+			</div>
+			<div class="pi"id="pic_3">
+				
+			</div>
+			<div class="pi"id="pic_4">
+			
+			</div>
+			<div class="pi"id="pic_5">
+				
+			</div>
+			<div class="pi"id="pic_6">
+				
+			</div>
+			<div class="pi"id="pic_7">
+				
+			</div>
+			<div class="pi"id="pic_8">
+				
+			</div>
+			<div class="pi"id="pic_9">
+				
+			</div>
+		</div>
+		<div class="footer">
+			<p>Copyright © 2016 茹孟凯</p>
+		</div>
+	</body>
+	<script src="js/jquery.min.js" type="text/javascript" charset="utf-8"></script>
+	<script type="text/javascript">
+		var id_1,id_2,css1,css2;
+		var aa=0;
+		$(".pi").click(function(){
+			if(aa==0){
+				//获取第一个id
+				id_1=$(this).attr("id");
+				//获取第一个id的位置坐标
+				css1=$("#"+id_1).css("background-position");
+				$("#"+id_1).css("opacity","0.5");
+				aa=1;
+			}else{
+				//获取第二个id
+				id_2=$(this).attr("id");
+				//获取第二个id的位置坐标
+				css2=$(this).css("background-position");
+				//alert("id_1:"+id_1+"id_2:"+id_2+"   "+"css1:"+css1+"css2"+css2);
+				//交换图片位置；
+				$("#"+id_1).css("background-position",css2);
+				$("#"+id_2).css("background-position",css1);
+				$("#"+id_1).css("opacity","1");
+				aa=0;
+			}
+		})
+	</script>
+</html>

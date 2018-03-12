@@ -1,0 +1,17 @@
+/* CSS Document */
+*{margin: 0;padding: 0;}
+.red{color: red;}
+.p1{width: 150px;margin: 10px auto;font-family: "黑体";font-size: 30px;}
+.p2{width: 300px;margin: 10px auto;}
+.pic{ width: 580px; height: 327px;margin: 20px auto;overflow: hidden;}
+.pic div{float: left; width: 193px ; height: 109px;overflow: hidden;background: url(../images/haizen.jpg); }
+.pic #pic_1{background-position: 0px 0px; }
+.pic #pic_2{background-position: -193px 0px; }
+.pic #pic_3{background-position: -386px 0px; }
+.pic #pic_4{background-position: 0px -109px; }
+.pic #pic_5{background-position: -193px -109px; }
+.pic #pic_6{background-position: -386px -109px; }
+.pic #pic_7{background-position: 0px -218px; }
+.pic #pic_8{background-position: -193px -218px; }
+.pic #pic_9{background-position: -386px -218px; }
+.footer{margin: 50px auto;width:200px;}

@@ -1,0 +1,18 @@
+.content ul li{width: 30%;perspective: 1000px;float: left;margin-right: 3%;margin-top: 30px;}
+.header .nav{float: none;}
+.header .wp .logo{float: none;}
+.header .wp{margin:0 auto;overflow: hidden;}
+/*index*/
+.con1 .wp{width: 90%;}
+.con1 .wp ul li{ width: 50%;}
+.con2 ul li{width: 50%;}
+.con3 ul li{width: 46%;}
+
+.menu{display: block;}
+#menulist{display: none;} 
+.footer{display: none;}
+.con4 .form .left{float: none;}
+.con4 .form .right{width:100%;float: none;}
+.con4 .form .right input{ width: 45%;}
+.con4 .form .right input[type="submit"]{width: 100%;}
+.con4 .form .right textarea{ width: 100% }
