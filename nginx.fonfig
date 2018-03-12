@@ -1,0 +1,286 @@
+user  root;
+worker_processes  4;
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+    log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+                      '$status $body_bytes_sent "$http_referer" '
+                      '"$http_user_agent" "$http_x_forwarded_for" $request_time $upstream_response_time';
+    access_log  logs/access.log  main;
+    sendfile        on;
+    tcp_nodelay on;
+    keepalive_timeout  65;
+    gzip  on;
+    gzip_min_length  1024;
+    gzip_buffers     4 8k;
+
+    server {
+      listen       80;
+      server_name  localhost;
+      client_max_body_size 500M;
+      proxy_connect_timeout       600;
+      proxy_send_timeout          600;
+      proxy_read_timeout          600;
+      send_timeout                600;
+      location /pcadmin/ {
+        if ($request_uri ~* '^/pcadmin/$') {
+            expires 0;
+        }
+        root html;
+      }
+      location /mengqi/ {
+        try_files $uri $uri/ /mengqi/index.html;
+        root html;
+        if ($request_uri ~* '^/h5/$') {
+            expires 0;
+        }
+       }
+       location /admin/live/ {
+           if ($request_method = 'OPTIONS') {
+               add_header 'Access-Control-Allow-Origin' *;
+               add_header 'Access-Control-Allow-Credentials' 'true';
+               add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+               add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,from,token,gid,version';
+               add_header 'Access-Control-Max-Age' 1728000;
+               add_header 'Content-Type' 'text/plain charset=UTF-8';
+               add_header 'Content-Length' 0;
+               return 204;
+           }
+           if ($request_method = 'POST') {
+               add_header 'Access-Control-Allow-Origin' *;
+               add_header 'Access-Control-Allow-Credentials' 'true';
+               add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+               add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,from,token,gid,version';
+           }
+           if ($request_method = 'GET') {
+               add_header 'Access-Control-Allow-Origin' *;
+               add_header 'Access-Control-Allow-Credentials' 'true';
+               add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+               add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,from,token,gid,version';
+           }
+           proxy_pass http://localhost:8091;
+           proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+           proxy_set_header X-Forwarded-Proto $scheme;
+           proxy_set_header X-Forwarded-Port $server_port;
+
+       }
+       location /admin/activity/ {
+         if ($request_method = 'OPTIONS') {
+            add_header 'Access-Control-Allow-Origin' *;
+            add_header 'Access-Control-Allow-Credentials' 'true';
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+            add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,from,token,gid,version';
+            add_header 'Access-Control-Max-Age' 1728000;
+            add_header 'Content-Type' 'text/plain charset=UTF-8';
+            add_header 'Content-Length' 0;
+            return 204;
+          }
+          if ($request_method = 'POST') {
+            add_header 'Access-Control-Allow-Origin' *;
+            add_header 'Access-Control-Allow-Credentials' 'true';
+            add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+            add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,from,token,gid,version';
+          }
+          if ($request_method = 'GET') {
+             add_header 'Access-Control-Allow-Origin' *;
+             add_header 'Access-Control-Allow-Credentials' 'true';
+             add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+             add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,from,token,gid,version';
+           }
+          proxy_pass http://localhost:8087;
+          proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+          proxy_set_header X-Forwarded-Proto $scheme;
+          proxy_set_header X-Forwarded-Port $server_port;
+        }
+        if ($host = 'm.51xy8.com'){
+           rewrite ^/(.*)$ https://m.kofuf.com/$1 permanent;
+        }
+        location /ueditor/ {
+            root html;
+        }
+        location /m/ {
+            root html;
+            if ($request_uri ~* '\.html') {
+                expires 0;
+            }
+            if ($request_uri ~* '^/m/') {
+                expires 0;
+            }
+            if ($request_uri ~* '\.(js|css|png)') {
+                expires 100d;
+            }
+            if ($host = 'm.51xy8.com'){
+                rewrite ^/(.*)$ https://m.kofuf.com/$1 permanent;
+            }   
+            rewrite ^/m/gift/(.*)$ /m/$1 permanent;
+            rewrite ^/m/channel/(.*)$  /m/channel.html?id=$1 permanent;
+            rewrite ^/m/small-channel/(.*)$ /m/channel-small.html?id=$1 permanent;
+            rewrite ^/m/article/(.*)$ /m/detail.html?id=$1 permanent;
+            rewrite ^/m/good/(.*)$ /m/good.html?id=$1 permanent;
+            rewrite ^/m/book-detail/(.*)$ /m/book-detail.html?id=$1 permanent;
+            rewrite ^/m/books-list/(.*)$ /m/books-list.html?id=$1 permanent;
+            rewrite ^/m/teacher-book-detail/(.*)$ /m/book-detail.html?id=$1 permanent;
+            rewrite ^/m/$ /m/home.html permanent;
+            rewrite /t/729 http://www.bagevent.com/event/635147?bag_track=017 permanent;
+        }
+        location /admin/ {
+            if ($request_method = 'OPTIONS') {
+                add_header 'Access-Control-Allow-Origin' *;
+                add_header 'Access-Control-Allow-Credentials' 'true';
+                add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+                add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,from,token,gid,version';
+                add_header 'Access-Control-Max-Age' 1728000;
+                add_header 'Content-Type' 'text/plain charset=UTF-8';
+                add_header 'Content-Length' 0;
+                return 204;
+            }
+            if ($request_method = 'POST') {
+                add_header 'Access-Control-Allow-Origin' *;
+                add_header 'Access-Control-Allow-Credentials' 'true';
+                add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+                add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,from,token,gid,version';
+            }
+            if ($request_method = 'GET') {
+                add_header 'Access-Control-Allow-Origin' *;
+                add_header 'Access-Control-Allow-Credentials' 'true';
+                add_header 'Access-Control-Allow-Methods' 'GET, POST, OPTIONS';
+                add_header 'Access-Control-Allow-Headers' 'DNT,X-CustomHeader,Keep-Alive,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,from,token,gid,version';
+            }
+            proxy_pass http://localhost:8081;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            proxy_set_header X-Forwarded-Port $server_port;
+
+        }
+        location /active/ {
+            root html;
+            if ($request_uri ~* '\.html') {
+                expires 0;
+            }
+        }
+        location /g/ {
+            rewrite ^/g/xiaofeng$ /mengqi/#/activity/detail/1 permanent;
+            rewrite ^/g/c/(.*)$ /mengqi/#/c/$1 permanent;
+        }
+        location /licaishi/ {
+            expires 0;
+            try_files $uri $uri/ /licaishi/index.html;
+            root html;
+        }
+        location / {
+            root html;
+            if ( $host = 'pcadmin.kofuf.com' ){
+                rewrite ^/$ /pcadmin/index.html permanent;
+            }
+            if ( $host = 'm.kofuf.com' ){
+                rewrite ^/$ /m/home.html permanent;
+            }
+            if ($host = 'm.51xy8.com'){
+                rewrite ^/(.*)$ https://m.kofuf.com/$1 permanent;
+            }
+            if ( $host = 'licaishi.kofuf.com' ){
+                rewrite ^/$ /licaishi/index.html permanent;
+            }
+            if ( $host = 'houyi.kofuf.com' ){
+                rewrite ^/$ /houyi/index.html permanent;
+            }
+            if ( $host = 'licaishi.hurun.net' ){
+                 rewrite ^/$ /licaishi/index.html break;
+            }
+        }
+    }
+
+  server {
+    listen 443;
+    server_name localhost;
+    ssl on;
+    ssl_certificate   cert/214270319480681.pem;
+    ssl_certificate_key  cert/214270319480681.key;
+    ssl_session_timeout 5m;
+    ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4;
+    ssl_protocols TLSv1 TLSv1.1 TLSv1.2;
+    ssl_prefer_server_ciphers on;
+    location /api/ {
+        add_header Access-Control-Allow-Origin *;
+        proxy_pass http://localhost:8000;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Port $server_port;
+    }
+    location /pay/ {
+        add_header Access-Control-Allow-Origin *;
+        proxy_pass http://localhost:8002;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Forwarded-Port $server_port;
+    }
+    location /mengqi/ {
+        try_files $uri $uri/ /mengqi/index.html;
+        root html;
+        if ($request_uri ~* '^/h5/$') {
+            expires 0;
+        }
+    }
+    location /m/ {
+        root html;
+        if ($request_uri ~* '\.html') {
+                expires 0;
+        }
+        if ($request_uri ~* '^/m/') {
+                expires 0;
+        }
+        if ($request_uri ~* '\.(js|css|png)') {
+                expires 100d;
+        }
+        rewrite ^/m/gift/(.*)$ /m/$1 permanent;
+        rewrite ^/m/channel/(.*)$  /m/channel.html?id=$1 permanent;
+        rewrite ^/m/small-channel/(.*)$ /m/channel-small.html?id=$1 permanent;
+        rewrite ^/m/article/(.*)$ /m/detail.html?id=$1 permanent;
+        rewrite ^/m/good/(.*)$ /m/good.html?id=$1 permanent;
+        rewrite ^/m/book-detail/(.*)$ /m/book-detail.html?id=$1 permanent;
+        rewrite ^/m/books-list/(.*)$ /m/books-list.html?id=$1 permanent;
+        rewrite ^/m/teacher-book-detail/(.*)$ /m/book-detail.html?id=$1 permanent;
+        rewrite ^/m/$ /m/home.html permanent;
+        rewrite /t/729 http://www.bagevent.com/event/635147?bag_track=017 permanent;
+    }
+    #short link
+    location /g/ {
+        rewrite ^/g/xiaofeng$ /mengqi/#/activity/detail/1 permanent;
+        rewrite ^/g/c/(.*)$ /mengqi/#/c/$1 permanent;
+    }
+    location /active/ {
+        root html;
+        if ($request_uri ~* '\.html') {
+            expires 0;
+        }
+        if ($request_uri ~* '^/active/$') {
+            expires 0;
+        }       
+    } 
+    location /licaishi/ {
+        try_files $uri $uri/ /licaishi/index.html;
+        root html;
+    }
+    location / {
+        root html;
+        if ( $host = 'm.kofuf.com' ){
+            rewrite ^/$ /m/home.html permanent;
+        }
+        if ( $host = 'm.51xy8.com' ){
+            rewrite ^/$ /m/home.html break;
+        }
+        if ( $host = 'licaishi.kofuf.com' ){
+            rewrite ^/$ /licaishi/index.html break;  
+        }
+        if ( $host = 'licaishi.hurun.net' ){
+            rewrite ^/$ /licaishi/index.html break;
+        }
+    }
+  }
+}
